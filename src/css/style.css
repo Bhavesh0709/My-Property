@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap');
+
+*{
+    font-family: 'Montserrat', sans-serif;
+}
+.top-container{
+    padding:50px 25px;
+    margin-top:120px;
+}
+.navbar-brand{
+    font-weight: 900;
+}
+
+.title-heading{
+    font-weight: 900;
+    line-height: 35px;
+}
