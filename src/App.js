@@ -10,6 +10,8 @@ import Footer from "../src/inc/Footer";
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 
+
+
 function App() {
   return (
     <Router>
@@ -48,6 +50,8 @@ function App() {
        
       </div>
     </Router>
+      
+    
   );
 }
 

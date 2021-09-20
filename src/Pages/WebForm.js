@@ -1,195 +1,201 @@
-// Do install the package from this website https://www.npmjs.com/package/country-state-city
-
-import React, { Component } from "react";
-import { Button, Container, Form, Row, Col, Alert } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
 import temp from "../img/sample.svg";
 import { Country, State, City } from "country-state-city";
-import { ICountry, IState, ICity } from "country-state-city";
+import axios from 'axios'
 
-class WebForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: "",
-      lname: "",
-      country: "",
-      stateCode: "",
-      isLoaded: false,
-      items: [],
-      itemsList: [],
-      itemsList1: [],
-    };
-  }
-  
+function WebForm() {
 
-  nameChangeHandler = (event) => {
-    this.setState({
-      name: event.target.value,
-    });
-  
+//   const [user,setUser] = useState({
+//     fname:"",
+//     lname:""
+// });    
+
+// const {fname,lname} = user;
+
+// const onInputChange = e => {
+// setUser({...user,[e.target.name]: e.target.value});
+// }
+  const [fname, setfname] = useState("");
+  const [lname, setlname] = useState("");
+  const [showCountry, setShowCountry] = useState([]);
+  const [showState, setShowState] = useState([]);
+  const [showCity, setShowCity] = useState([]);
+  const [countryCode, setCountryCode] = useState("");
+  const [stateCode, setStateCode] = useState("");
+  const [cityCode, setCityCode] = useState("");
+  const [pinCode, setPinCode] = useState(0);
+
+  const nameChangeHandler = (event) => {
+    setfname(event.target.value);
+    console.log(event.target.value);
   };
-
-  lnameChangeHandler = (event) => {
-    this.setState({
-      lname: event.target.value,
-    });
+  const lnameChangeHandler = (event) => {
+    setlname(event.target.value);
+    console.log(event.target.value);
   };
-
-  countryChangeHandler = (event) => {
-    this.setState({
-      country: event.target.value,
-      itemsList: State.getStatesOfCountry(event.target.value),
-     
-    });
-    console.log("Country Name = ",this.state.country);
+  const countryCodeHandler = (event) => {
+    setCountryCode(event.target.value);
+    console.log(event.target.value);
   };
-
-  stateChangeHandler = (event) => {
-    console.log("State code ", event.target.value);
-    this.setState({
-      stateCode:event.target.value,
-      itemsList1: City.getCitiesOfState(this.state.country,event.target.value),
-    })
+  const stateCodeHandler = (event) => {
+    setStateCode(event.target.value);
+    console.log(event.target.value);
   };
-
-  assignCodeHandler = ( ) => {
-
-  }
-  //While submiting the form
-  submitHandler = () => {
-    alert(
-      this.state.name +' ' +  this.state.lname + ' '+ this.state.country + ' ' + this.state.stateCode,
-      
-    );
+  const cityCodeHandler = (event) => {
+    setCityCode(event.target.value);
+    console.log(event.target.value);
   };
+  const pinCodeHandler = (event) => {
+    setPinCode(event.target.value);
+  };
+  useEffect(() => {
+    setShowCountry(Country.getAllCountries());
+  }, []);
+  useEffect(() => {
+    setShowState(State.getStatesOfCountry(countryCode));
+  }, [countryCode]);
 
-  componentDidMount() {
-    this.setState({
-      items: Country.getAllCountries(),         
-    });
-  }
-  render() {
-    var {
-      name,
+  useEffect(() => {
+    setShowCity(City.getCitiesOfState(countryCode, stateCode));
+  }, [stateCode]);
+
+  var data = {
+    data: {
+      fname,
       lname,
-      country,
-      isLoaded,
-      items,
-      itemsList,
-      itemsList1,
-    } = this.state;
-  
-    return (
-      <div>
-        <Container className="mt-5 p-3">
-          <Alert variant="secondary">
-            <strong>Add your personal details </strong>
-          </Alert>
-          <Row className="mt-5">
-            <Col className="col-md-6 col-12 col-xs-12">
-              <Form onSubmit={this.submitHandler}>
-                <Row>
-                  <Col className="col-md-6 col-12">
-                    <Form.Group className="mb-3" controlId="forName">
-                      <Form.Label>First Name</Form.Label>
-                      <Form.Control
-                        type="Text"
-                        placeholder="Enter here"
-                        value={name}
-                        onChange={this.nameChangeHandler}
-                        required
-                      />
-                    </Form.Group>
-                  </Col>
+      countryCode,
+      stateCode,
+      cityCode,
+      pinCode
+    },
+  };
 
-                  <Col className="col-md-6 col-12">
-                    <Form.Group className="mb-3" controlId="forName">
-                      <Form.Label>Last Name</Form.Label>
-                      <Form.Control
-                        type="Text"
-                        placeholder="Enter here"
-                        value={lname}
-                        onChange={this.lnameChangeHandler}
-                        required
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
-                <div className="State">
-                  <Form.Label>Select Country</Form.Label>
-                  <Form.Select
-                    value={country}
-                    onChange={this.countryChangeHandler}
-                    required
-                  >
-                  {/* <option>Select your country</option> */}
-                    {items.map((item) => (
-                      <option value={item.isoCode}>{item.name}</option>
-                    ))}
-                  </Form.Select>  
-                </div>
-                <Row className="mt-3">
-                  <Col className="col-md-4 col-12 col-xs-12 mt-1">
-                    <Form.Label>Select State</Form.Label>
-                    <Form.Select onChange={this.stateChangeHandler} required>
-                    {/* <option>Select your state</option> */}
-                      {itemsList.map((item) => (
-                        
-                        <option value={item.isoCode}>{item.name}</option>
-                      ))}
-                    </Form.Select>
-                  </Col>
-
-                  <Col className="col-md-4 col-12 col-xs-12 mt-1">
-                    <Form.Label>Select City</Form.Label>
-                    <Form.Select required>
-                      {itemsList1.map((item) => (
-                        <option>{item.name}</option>
-                      ))}
-                    </Form.Select>
-                  </Col>
-
-                  {/* <Col className="col-md-4 col-sm-12 col-xs-12 mt-1">
-                    <Form.Group controlId="forSuburban">
-                      <Form.Label>Suburban</Form.Label>
-                      <Form.Control type="Text" placeholder="Enter here" />
-                    </Form.Group>
-                  </Col> */}
-
-                  <Col className="col-md-4 col-12 col-xs-12 mt-1">
-                    <Form.Group controlId="forSuburban">
-                      <Form.Label>Pincode</Form.Label>
-                      <Form.Control
-                        type="number"
-                        placeholder="Enter here"
-                        min="100000"
-                        required
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
-                <Button
-                  type="submit"
-                  className="btn btn-success  my-5 px-3"
-                  onSubmit={temp}
-                >
-                  Submit
-                </Button>
-              </Form>
-            </Col>
-
-            <Col className="col-md-6 col-sm-12 col-xs-12">
-              <img
-                src={temp}
-                className="img-fluid px-2 mx-2"
-                height="200px "
-              ></img>
-            </Col>
-          </Row>
-        </Container>
-      </div>
-    );
+  const onSubmit = event => {
+    event.preventDefault();
+    console.log("In submit");
+    let axiosConfig = {
+        headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+        },
+        };    
+    axios.post("/posts",data,axiosConfig).then((res)=>{console.log(res)});
   }
+  return (
+    <div>
+      <div className="container mt-5 p-3">
+        <div className="alert alert-secondary">
+          <strong>Add your personal details </strong>
+        </div>
+        <div className="row mt-5">
+          <div className="col-md-6 col-12 col-xs-12">
+            <form onSubmit={onSubmit}>
+              <div className="row">
+                <div className="col-md-6 col-12">
+                  <label for="firstName" className="form-label">
+                    First Name
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Enter here"
+                    value={fname}
+                    name="fname"
+                    onChange={nameChangeHandler}
+                  />
+                </div>
+                <div className="col-md-6 col-12">
+                  <label for="lastName" className="form-label">
+                    Last Name
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Enter here"
+                    value={lname}
+                    name="lname"
+                    onChange={lnameChangeHandler}
+                  />
+                </div>
+              </div>
+              <div className="row mt-3">
+                <div className="col-md-12 col-12">
+                  <label for="Country" className="form-label">
+                    Country
+                  </label>
+                  <select
+                    id="country"
+                    className="form-select"
+                    name="country"
+                    onChange={countryCodeHandler}
+                  >
+                    {showCountry.map((item) => (
+                      <option  key={item.id} value={item.isoCode}>{item.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="row mt-4">
+                <div className="col-md-4 col-12">
+                  <label for="State" className="form-label">
+                    State
+                  </label>
+                  <select
+                    id="inputState"
+                    className="form-select"
+                    name="state"
+                    onChange={stateCodeHandler}
+                  >
+                    {showState.map((item) => (
+                      <option key={item.id} value={item.isoCode}>{item.name}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="col-md-4 col-12">
+                  <label for="State" className="form-label">
+                    City
+                  </label>
+                  <select
+                    id="inputState"
+                    className="form-select"
+                    name="city"
+                    onChange={cityCodeHandler}
+                  >
+                    {showCity.map((item) => (
+                      <option  key={item.id} value={item.name}>{item.name}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="col-md-4 col-12">
+                  <label for="State" class="form-label">
+                    Pincode
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    placeholder="Enter here"
+                    name="pincode"
+                    min="100000"
+                    onChange={pinCodeHandler}
+                  />
+                </div>
+              </div>
+              <button type="submit" className="btn btn-success my-5 px-3">
+                Submit
+              </button>
+            </form>
+          </div>
+          <div className="col-md-6 col-12">
+            <img
+              src={temp}
+              className="img-fluid px-2 mx-2"
+              height="200px"
+            ></img>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default WebForm;
