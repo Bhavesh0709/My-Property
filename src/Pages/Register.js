@@ -1,7 +1,27 @@
 import React, { Component } from "react";
-
+import GoogleLogin from "react-google-login";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import WebForm from "./WebForm";
+import { Link } from "react-router-dom";
+import { useHistory } from "react-router";
 export class Register extends Component {
-  render() {
+  
+  responseGoogle=(response,e)=>{
+    e.preventDefault();
+    // console.log(response);
+    // console.log(response.profile.Obj);
+    <Switch>
+        <Route to="/WebForm" component={WebForm} />
+    </Switch>
+    alert('Successfull login');
+
+    console.log("Name = ",response.profileObj.name);
+   
+    
+  }
+
+
+  render(){
     return (
       <div>
         <div className="container mx-auto py-5 ">
@@ -10,6 +30,8 @@ export class Register extends Component {
               <div className="card">
                 <div className="card-body shadow">
                   <h5 className="navbar-brand text-center mt-3"><strong>Register</strong></h5>
+                  
+                  
                   <form>
                   <div className=" mt-3 p-3">
                     <label for="exampleInputEmail1" class="form-label">Name</label>
@@ -28,9 +50,20 @@ export class Register extends Component {
                     </div>
                   </form>
                   <div className="text-end mx-3 ">
-                  <a href="#" className="btn btn-success">
+                  <a href="11" className="btn btn-success">
                     Register
-                  </a>
+                  </a> &nbsp;&nbsp;
+                  
+                  <GoogleLogin
+                    className="google-login"
+                    clientId="67065215570-ffm2166jpk60a97n7fhcg0ku20nkmr1e.apps.googleusercontent.com"
+                    buttonText="Login"
+                    onSuccess={this.responseGoogle}
+                    onFailure={this.responseGoogle}
+                    cookiePolicy={'single_host_origin'}
+                   />
+    
+                
                   </div>
                 </div>
               </div>
