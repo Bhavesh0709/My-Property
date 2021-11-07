@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import GoogleLogin from "react-google-login";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import WebForm from "./WebForm";
-import { Link } from "react-router-dom";
-import { useHistory } from "react-router";
 export class Register extends Component {
   
   responseGoogle=(response,e)=>{

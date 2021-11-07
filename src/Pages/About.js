@@ -1,5 +1,5 @@
 import React from 'react';
-import VMC from './incs/Vmc';
+
 
 function About(){
     return(

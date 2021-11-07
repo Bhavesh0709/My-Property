@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import temp from "../img/sample.svg";
 import { Country, State, City } from "country-state-city";
-import axios from 'axios'
+
 
 function Personal(props) {
 
@@ -36,9 +36,14 @@ function Personal(props) {
   }, [stateCode]);
 
   useEffect(() => {
-    props.personal(userData);
-  },[userData]);
+    props.getPersonal(userData);
+},[userData.pinCode]);
 
+  //   useEffect(() => {
+  //     props.getPersonalData(userData);
+  // },[userData])
+
+    
  
   return (
     <div>
